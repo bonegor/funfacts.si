@@ -1,0 +1,28 @@
+// Add, remove or edit facts here. Each fact's number on the site is its
+// position in this list, so add new ones at the end to keep old links working.
+const FACTS = [
+  "Octopuses have three hearts and blue blood.",
+  "Honey never spoils. Archaeologists have found pots of honey in ancient Egyptian tombs that were still edible.",
+  "Botanically speaking, bananas are berries, but strawberries aren't.",
+  "A day on Venus is longer than its year: one spin takes 243 Earth days, one trip around the Sun only 225.",
+  "Wombats produce cube-shaped poop.",
+  "Sharks have been around longer than trees.",
+  "Oxford University was already teaching students before the Aztec capital Tenochtitlan was founded.",
+  "Cleopatra lived closer in time to the Moon landing than to the building of the Great Pyramid of Giza.",
+  "A group of flamingos is called a flamboyance.",
+  "The Eiffel Tower can grow about 15 cm taller in summer as its iron expands in the heat.",
+  "Scotland's national animal is the unicorn.",
+  "There are more possible games of chess than there are atoms in the observable universe.",
+  "Butterflies taste with their feet.",
+  "A bolt of lightning is roughly five times hotter than the surface of the Sun.",
+  "Sunlight takes about 8 minutes and 20 seconds to reach Earth, so you always see the Sun as it was a few minutes ago.",
+  "The shortest war in history, between Britain and Zanzibar in 1896, lasted less than an hour.",
+  "Slovenia has more than 13,000 known caves, and new ones are discovered every year.",
+  "The olm, a blind salamander that lives in Slovenian caves, can live for over 100 years and survive up to a decade without food.",
+  "The world's oldest known wooden wheel, over 5,000 years old, was found in the Ljubljana Marshes.",
+  "Lipizzaner horses are named after Lipica in Slovenia, where their stud farm was founded in 1580.",
+  "World Bee Day, 20 May, was proposed by Slovenia and adopted by the United Nations in 2017.",
+  "Nearly 60% of Slovenia is covered by forest, one of the highest shares in Europe.",
+  "The first ski jump longer than 100 metres was made at Planica, Slovenia, in 1936.",
+  "Slovenia is one of the few countries with “love” in its name.",
+];

@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>funfacts.si · one fun fact at a time</title>
+  <meta name="description" content="Bite-sized fun facts about science, history, nature and Slovenia. Tap for another one.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://funfacts.si/">
+  <meta property="og:title" content="funfacts.si">
+  <meta property="og:description" content="Bite-sized fun facts. Tap for another one.">
+  <meta name="theme-color" content="#fff8f0" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#16130f" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💡</text></svg>">
+  <style>
+    :root {
+      --bg: #fff8f0;
+      --card: #ffffff;
+      --ink: #1d1a16;
+      --muted: #6f675d;
+      --accent: #e8472a;
+      --accent-ink: #ffffff;
+      --line: #eadfd2;
+      --shadow: 0 1px 2px rgb(60 40 20 / .06), 0 12px 40px rgb(60 40 20 / .08);
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #16130f;
+        --card: #211d18;
+        --ink: #f4ede4;
+        --muted: #a69c8f;
+        --accent: #ff7a5c;
+        --accent-ink: #1d1a16;
+        --line: #342e27;
+        --shadow: 0 1px 2px rgb(0 0 0 / .3), 0 12px 40px rgb(0 0 0 / .35);
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; }
+    body {
+      min-height: 100vh;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg);
+      color: var(--ink);
+      font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header, footer { padding: 20px 16px; text-align: center; }
+    .logo {
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: -.02em;
+      color: var(--ink);
+      text-decoration: none;
+    }
+    .logo span { color: var(--accent); }
+
+    main {
+      flex: 1;
+      display: grid;
+      place-items: center;
+      padding: 8px 16px 32px;
+    }
+    .card {
+      width: 100%;
+      max-width: 640px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: clamp(24px, 6vw, 48px);
+    }
+    .label {
+      margin: 0 0 16px;
+      font-size: .8rem;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+    .fact {
+      margin: 0;
+      min-height: 5.2em;
+      font-family: ui-serif, Georgia, "Times New Roman", serif;
+      font-size: clamp(1.4rem, 4.5vw, 2rem);
+      line-height: 1.3;
+      text-wrap: pretty;
+    }
+    .fact.swap { animation: fade-in .35s ease; }
+    @keyframes fade-in {
+      from { opacity: 0; transform: translateY(6px); }
+    }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+    button {
+      font: inherit;
+      font-weight: 600;
+      padding: 12px 22px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      transition: transform .1s ease, filter .2s ease, background-color .2s ease;
+    }
+    button:hover { background-color: var(--bg); }
+    button:active { transform: scale(.97); }
+    button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+    button.primary {
+      background: var(--accent);
+      border-color: transparent;
+      color: var(--accent-ink);
+    }
+    button.primary:hover { filter: brightness(1.08); }
+
+    .hint { margin: 20px 0 0; font-size: .85rem; color: var(--muted); }
+    kbd {
+      font: inherit;
+      padding: 1px 6px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+    }
+    @media (hover: none) { .hint { display: none; } }
+
+    footer { font-size: .85rem; color: var(--muted); }
+
+    @media (prefers-reduced-motion: reduce) {
+      .fact.swap { animation: none; }
+      button { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <a class="logo" href="/">funfacts<span>.si</span></a>
+  </header>
+
+  <main>
+    <article class="card">
+      <p class="label" id="label">Fun fact #01</p>
+      <p class="fact" id="fact" aria-live="polite">Octopuses have three hearts and blue blood.</p>
+      <div class="actions">
+        <button class="primary" id="next" type="button">Another fact →</button>
+        <button id="share" type="button">Share this one</button>
+      </div>
+      <p class="hint">Tip: press <kbd>Space</kbd> for the next one.</p>
+    </article>
+  </main>
+
+  <footer>Made with curiosity in Slovenia 🇸🇮</footer>
+
+  <script src="facts.js"></script>
+  <script>
+    const factEl = document.getElementById("fact");
+    const labelEl = document.getElementById("label");
+    const nextBtn = document.getElementById("next");
+    const shareBtn = document.getElementById("share");
+
+    // Facts are dealt from a shuffled deck so none repeats until all were shown.
+    let deck = [];
+    let current = -1;
+
+    function shuffledDeck() {
+      const idx = FACTS.map((_, i) => i);
+      for (let i = idx.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [idx[i], idx[j]] = [idx[j], idx[i]];
+      }
+      return idx.filter((i) => i !== current);
+    }
+
+    function show(i) {
+      current = i;
+      deck = deck.filter((d) => d !== i);
+      factEl.textContent = FACTS[i];
+      labelEl.textContent = "Fun fact #" + String(i + 1).padStart(2, "0");
+      factEl.classList.remove("swap");
+      void factEl.offsetWidth; // restart the fade-in animation
+      factEl.classList.add("swap");
+      history.replaceState(null, "", "#" + (i + 1));
+    }
+
+    function next() {
+      if (!deck.length) deck = shuffledDeck();
+      show(deck.pop());
+    }
+
+    // A link like funfacts.si/#7 opens fact number 7.
+    function factFromHash() {
+      const n = parseInt(location.hash.slice(1), 10);
+      return n >= 1 && n <= FACTS.length ? n - 1 : -1;
+    }
+
+    async function share() {
+      const url = location.href;
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: "funfacts.si", text: FACTS[current], url });
+        } catch (_) { /* share sheet was closed */ }
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(url);
+        shareBtn.textContent = "Link copied!";
+        setTimeout(() => (shareBtn.textContent = "Share this one"), 1500);
+      } catch (_) {
+        window.prompt("Copy this link:", url);
+      }
+    }
+
+    nextBtn.addEventListener("click", next);
+    shareBtn.addEventListener("click", share);
+
+    document.addEventListener("keydown", (e) => {
+      if (e.target.closest("button, a, input, textarea") || e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key === " " || e.key === "ArrowRight" || e.key === "n") {
+        e.preventDefault();
+        next();
+      }
+    });
+
+    window.addEventListener("hashchange", () => {
+      const i = factFromHash();
+      if (i !== -1 && i !== current) show(i);
+    });
+
+    const linked = factFromHash();
+    linked !== -1 ? show(linked) : next();
+  </script>
+</body>
+</html>
