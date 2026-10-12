@@ -1,9 +1,9 @@
 # funfacts.si
 
-A one-page site that shows a random fun fact. Plain HTML and JavaScript: no build step, no dependencies.
+A one-page site that shows random fun facts about machine learning, statistics, AI and data science. Plain HTML and JavaScript: no build step, no dependencies.
 
 - `index.html`: the page (styles and script are inline)
-- `facts.js`: the list of facts. Edit this to add your own.
+- `facts.js`: the list of facts. Each one has a `tag` (the topic shown on the card) and its `text`.
 - `404.html`: shown for any URL that doesn't exist
 - `CNAME`: tells GitHub Pages to serve the site at `funfacts.si`
 
