@@ -177,7 +177,8 @@
 
   <footer>No models were overfit in the making of this site.</footer>
 
-  <script src="facts.js"></script>
+  <!-- Bump ?v= when the format of facts.js changes, so browsers don't pair this page with a cached older copy. -->
+  <script src="facts.js?v=2"></script>
   <script>
     const factEl = document.getElementById("fact");
     const countEl = document.getElementById("count");
@@ -185,13 +186,15 @@
     const nextBtn = document.getElementById("next");
     const shareBtn = document.getElementById("share");
     const pad = (n) => String(n).padStart(2, "0");
+    // Plain strings work too, for facts added without a tag.
+    const facts = FACTS.map((f) => (typeof f === "string" ? { tag: "", text: f } : f));
 
     // Facts are dealt from a shuffled deck so none repeats until all were shown.
     let deck = [];
     let current = -1;
 
     function shuffledDeck() {
-      const idx = FACTS.map((_, i) => i);
+      const idx = facts.map((_, i) => i);
       for (let i = idx.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [idx[i], idx[j]] = [idx[j], idx[i]];
@@ -202,9 +205,10 @@
     function show(i) {
       current = i;
       deck = deck.filter((d) => d !== i);
-      factEl.textContent = FACTS[i].text;
-      tagEl.textContent = FACTS[i].tag;
-      countEl.textContent = "fact " + pad(i + 1) + " / " + pad(FACTS.length);
+      factEl.textContent = facts[i].text;
+      tagEl.textContent = facts[i].tag;
+      tagEl.hidden = !facts[i].tag;
+      countEl.textContent = "fact " + pad(i + 1) + " / " + pad(facts.length);
       for (const el of [factEl, tagEl]) {
         el.classList.remove("swap");
         void el.offsetWidth; // restart the fade-in animation
@@ -221,14 +225,14 @@
     // A link like funfacts.si/#7 opens fact number 7.
     function factFromHash() {
       const n = parseInt(location.hash.slice(1), 10);
-      return n >= 1 && n <= FACTS.length ? n - 1 : -1;
+      return n >= 1 && n <= facts.length ? n - 1 : -1;
     }
 
     async function share() {
       const url = location.href;
       if (navigator.share) {
         try {
-          await navigator.share({ title: "funfacts.si", text: FACTS[current].text, url });
+          await navigator.share({ title: "funfacts.si", text: facts[current].text, url });
         } catch (_) { /* share sheet was closed */ }
         return;
       }
