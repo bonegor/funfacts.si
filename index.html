@@ -82,18 +82,11 @@
       box-shadow: var(--shadow);
       padding: clamp(24px, 6vw, 44px);
     }
-    .meta {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px 12px;
+    .tag {
+      display: inline-block;
       margin-bottom: 20px;
       font-family: var(--mono);
       font-size: .8rem;
-    }
-    .count { color: var(--muted); }
-    .tag {
       padding: 3px 10px;
       border-radius: 999px;
       background: var(--accent-soft);
@@ -109,6 +102,36 @@
       letter-spacing: -.01em;
       text-wrap: pretty;
     }
+    .tag[hidden] { display: none; }
+
+    .timeline {
+      list-style: none;
+      margin: 24px 0 0;
+      padding: 0 0 0 20px;
+      border-left: 2px solid var(--line);
+    }
+    .timeline li { position: relative; margin-bottom: 16px; line-height: 1.45; }
+    .timeline li:last-child { margin-bottom: 0; }
+    .timeline li::before {
+      content: "";
+      position: absolute;
+      left: -27px;
+      top: 5px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--card);
+      border: 2px solid var(--accent);
+      box-sizing: border-box;
+    }
+    .timeline .year {
+      display: block;
+      font-family: var(--mono);
+      font-size: .8rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
     .swap { animation: fade-in .35s ease; }
     @keyframes fade-in {
       from { opacity: 0; transform: translateY(6px); }
@@ -162,11 +185,11 @@
 
   <main>
     <article class="card">
-      <div class="meta">
-        <span class="count" id="count">fact 01 / 36</span>
+      <div id="content" aria-live="polite">
         <span class="tag" id="tag">History of AI</span>
+        <p class="fact" id="fact">Google didn't invent attention. The famous 2017 paper “Attention Is All You Need” built on years of work by others. Its real leap was showing that attention alone, with no recurrence at all, was enough.</p>
+        <ul class="timeline" id="timeline" hidden></ul>
       </div>
-      <p class="fact" id="fact" aria-live="polite">The term “artificial intelligence” was coined by John McCarthy in a 1955 proposal for a summer workshop at Dartmouth College.</p>
       <div class="actions">
         <button class="primary" id="next" type="button">Another fact →</button>
         <button id="share" type="button">Share this one</button>
@@ -178,18 +201,19 @@
   <footer>No models were overfit in the making of this site.</footer>
 
   <!-- Bump ?v= when the format of facts.js changes, so browsers don't pair this page with a cached older copy. -->
-  <script src="facts.js?v=2"></script>
+  <script src="facts.js?v=3"></script>
   <script>
+    const contentEl = document.getElementById("content");
     const factEl = document.getElementById("fact");
-    const countEl = document.getElementById("count");
     const tagEl = document.getElementById("tag");
+    const timelineEl = document.getElementById("timeline");
     const nextBtn = document.getElementById("next");
     const shareBtn = document.getElementById("share");
-    const pad = (n) => String(n).padStart(2, "0");
     // Plain strings work too, for facts added without a tag.
     const facts = FACTS.map((f) => (typeof f === "string" ? { tag: "", text: f } : f));
 
-    // Facts are dealt from a shuffled deck so none repeats until all were shown.
+    // After the first fact, facts are dealt from a shuffled deck so none
+    // repeats until all of them were shown.
     let deck = [];
     let current = -1;
 
@@ -203,18 +227,24 @@
     }
 
     function show(i) {
+      const fact = facts[i];
       current = i;
       deck = deck.filter((d) => d !== i);
-      factEl.textContent = facts[i].text;
-      tagEl.textContent = facts[i].tag;
-      tagEl.hidden = !facts[i].tag;
-      countEl.textContent = "fact " + pad(i + 1) + " / " + pad(facts.length);
-      for (const el of [factEl, tagEl]) {
-        el.classList.remove("swap");
-        void el.offsetWidth; // restart the fade-in animation
-        el.classList.add("swap");
-      }
-      history.replaceState(null, "", "#" + (i + 1));
+      factEl.textContent = fact.text;
+      tagEl.textContent = fact.tag;
+      tagEl.hidden = !fact.tag;
+      timelineEl.replaceChildren(...(fact.timeline || []).map(([year, text]) => {
+        const li = document.createElement("li");
+        const yearEl = document.createElement("span");
+        yearEl.className = "year";
+        yearEl.textContent = year;
+        li.append(yearEl, text);
+        return li;
+      }));
+      timelineEl.hidden = !fact.timeline;
+      contentEl.classList.remove("swap");
+      void contentEl.offsetWidth; // restart the fade-in animation
+      contentEl.classList.add("swap");
     }
 
     function next() {
@@ -222,26 +252,21 @@
       show(deck.pop());
     }
 
-    // A link like funfacts.si/#7 opens fact number 7.
-    function factFromHash() {
-      const n = parseInt(location.hash.slice(1), 10);
-      return n >= 1 && n <= facts.length ? n - 1 : -1;
-    }
-
     async function share() {
-      const url = location.href;
+      const url = location.origin + "/";
+      const text = facts[current].text;
       if (navigator.share) {
         try {
-          await navigator.share({ title: "funfacts.si", text: facts[current].text, url });
+          await navigator.share({ title: "funfacts.si", text, url });
         } catch (_) { /* share sheet was closed */ }
         return;
       }
       try {
-        await navigator.clipboard.writeText(url);
-        shareBtn.textContent = "Link copied!";
+        await navigator.clipboard.writeText(text + "\n\n" + url);
+        shareBtn.textContent = "Copied!";
         setTimeout(() => (shareBtn.textContent = "Share this one"), 1500);
       } catch (_) {
-        window.prompt("Copy this link:", url);
+        window.prompt("Copy this fact:", text + " " + url);
       }
     }
 
@@ -256,13 +281,9 @@
       }
     });
 
-    window.addEventListener("hashchange", () => {
-      const i = factFromHash();
-      if (i !== -1 && i !== current) show(i);
-    });
-
-    const linked = factFromHash();
-    linked !== -1 ? show(linked) : next();
+    // Old links had a fact number after #; drop it so no numbers show.
+    if (location.hash) history.replaceState(null, "", location.pathname);
+    show(0);
   </script>
 </body>
 </html>

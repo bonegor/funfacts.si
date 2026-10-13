@@ -3,11 +3,11 @@
 A one-page site that shows random fun facts about machine learning, statistics, AI and data science. Plain HTML and JavaScript: no build step, no dependencies.
 
 - `index.html`: the page (styles and script are inline)
-- `facts.js`: the list of facts. Each one has a `tag` (the topic shown on the card) and its `text`.
+- `facts.js`: the list of facts. Each one has a `tag` (the topic shown on the card), its `text`, and optionally a `timeline` of `[year, text]` pairs shown under it.
 - `404.html`: shown for any URL that doesn't exist
 - `CNAME`: tells GitHub Pages to serve the site at `funfacts.si`
 
-Each fact has its own link: `https://funfacts.si/#7` opens fact number 7. Add new facts at the end of the list so existing links keep pointing to the same fact.
+The first fact in `facts.js` is always the one shown when the page opens; every fact after that comes in random order, with no repeats until all have been shown. The share button shares the fact's text along with the site link.
 
 ## Run it locally
 
