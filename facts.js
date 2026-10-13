@@ -2,18 +2,7 @@
 // all the others appear in random order.
 // A fact can also have a `timeline`: a list of [year, text] pairs shown under it.
 const FACTS = [
-  {
-    tag: "History of AI",
-    text: "Google didn't invent attention. The famous 2017 paper “Attention Is All You Need” built on years of work by others. Its real leap was showing that attention alone, with no recurrence at all, was enough.",
-    timeline: [
-      ["1991", "Jürgen Schmidhuber's “fast weight programmers”: a 2021 paper proved them mathematically equivalent to linear self-attention."],
-      ["2013", "Alex Graves (Toronto) lets a handwriting-generating network learn a soft “window” that decides which letter to look at next."],
-      ["2014", "Dzmitry Bahdanau, Kyunghyun Cho and Yoshua Bengio (Montréal) add attention to neural translation. The same model scores 26.8 BLEU on English–French instead of 17.8, and quality no longer collapses on long sentences."],
-      ["2015", "Minh-Thang Luong, Hieu Pham and Christopher Manning (Stanford) simplify the scoring to a dot product, the form Transformers still use."],
-      ["2016", "Jianpeng Cheng, Li Dong and Mirella Lapata (Edinburgh) point attention within a single sentence: self-attention."],
-      ["2017", "Ashish Vaswani and seven co-authors at Google drop recurrence entirely and add multi-head attention. Their Transformer beats the best English–German systems by over 2 BLEU after just 3.5 days of training on eight GPUs."],
-    ],
-  },
+  { tag: "History of AI", text: "Google didn't invent attention. Bahdanau, Cho and Bengio introduced it in 2014, lifting a translation model's score from 17.8 to 26.8 BLEU, and others refined it into self-attention by 2016. Google's 2017 Transformer took the last step: attention alone, with no recurrence." },
   { tag: "History of AI", text: "The term “artificial intelligence” was coined by John McCarthy in a 1955 proposal for a summer workshop at Dartmouth College." },
   { tag: "History of AI", text: "Arthur Samuel coined the term “machine learning” in 1959, describing a program that taught itself to play checkers better than he could." },
   { tag: "Neural networks", text: "In 1958 The New York Times reported that the US Navy expected Frank Rosenblatt's perceptron to one day “walk, talk, see, write, reproduce itself and be conscious of its existence.”" },
