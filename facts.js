@@ -2,7 +2,7 @@
 // all the others appear in random order.
 // A fact can also have a `timeline`: a list of [year, text] pairs shown under it.
 const FACTS = [
-  { tag: "History of AI", text: "Google didn't invent attention. Bahdanau, Cho and Bengio introduced it in 2014, lifting a translation model's score from 17.8 to 26.8 BLEU, and others refined it into self-attention by 2016. Google's 2017 Transformer took the last step: attention alone, with no recurrence." },
+  { tag: "Deep learning", text: "The T in GPT stands for Transformer, which Google researchers introduced in the 2017 paper “Attention Is All You Need.” They built it on attention, an idea Dzmitry Bahdanau, Kyunghyun Cho and Yoshua Bengio introduced in 2014 and others refined in the years after." },
   { tag: "History of AI", text: "The term “artificial intelligence” was coined by John McCarthy in a 1955 proposal for a summer workshop at Dartmouth College." },
   { tag: "History of AI", text: "Arthur Samuel coined the term “machine learning” in 1959, describing a program that taught itself to play checkers better than he could." },
   { tag: "Neural networks", text: "In 1958 The New York Times reported that the US Navy expected Frank Rosenblatt's perceptron to one day “walk, talk, see, write, reproduce itself and be conscious of its existence.”" },
@@ -32,7 +32,6 @@ const FACTS = [
   { tag: "Algorithms", text: "Geoffrey Hinton has said dropout was inspired by bank tellers being moved around so that no group of them could conspire to defraud the bank." },
   { tag: "Deep learning", text: "AlexNet, the network that kick-started the deep learning boom in 2012, was trained on two consumer gaming GPUs with 3 GB of memory each." },
   { tag: "Deep learning", text: "ImageNet's 14 million images were labelled by crowd workers on Amazon Mechanical Turk, which is named after an 18th-century chess “robot” that secretly hid a human player inside." },
-  { tag: "Deep learning", text: "The Transformer, the T in GPT, was introduced in the 2017 paper “Attention Is All You Need.”" },
   { tag: "Deep learning", text: "Word embeddings famously learned analogies like king − man + woman ≈ queen without ever being told what royalty or gender are." },
   { tag: "History of AI", text: "Alan Turing proposed what we now call the Turing test in 1950. He called it “the imitation game.”" },
   { tag: "History of AI", text: "When Joseph Weizenbaum's 1966 chatbot ELIZA was being tested, his secretary asked him to leave the room so she could talk to it in private." },
